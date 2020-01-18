@@ -18,7 +18,7 @@ public class PessoaEndpoint {
     public PessoaEndpoint(PessoaServiceImp service) {
         this.service = service;
     }
-
+    
     @GetMapping(path = "/pessoa")
     @ResponseBody
     public ResponseEntity<?> listAll() {
@@ -28,36 +28,65 @@ public class PessoaEndpoint {
     @GetMapping(path = "/pessoa/byId/{id}")
     @ResponseBody
     public ResponseEntity<?> byId(@PathVariable Integer id) {
-//        return service.findById(id);
-        return null;
+        Pessoa pessoa = service.findById(id);
+        if(validar(pessoa)) {
+            return new ResponseEntity<>(pessoa, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping(path = "/pessoa/byName/{nome}")
     @ResponseBody
     public ResponseEntity<?> byName(@PathVariable String nome) {
-        return new ResponseEntity<>(service.findByNome(nome), HttpStatus.OK);
+        Pessoa pessoa = service.findByNome(nome);
+        if(validar(pessoa)) {
+            return new ResponseEntity<>(pessoa, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping(path = "/pessoa/nova")
     @ResponseBody
     public ResponseEntity<?> novaPessoa(@RequestBody PessoaTO to) {
-        System.out.println(to);
-        return new ResponseEntity<>(service.novo(to), HttpStatus.CREATED);
+        Pessoa pessoa = service.novo(to);
+        if(validar(pessoa)) {
+            return new ResponseEntity<>(pessoa, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PatchMapping(path = "/pessoa/alterar/{id}")
     @ResponseBody
     public ResponseEntity<?> alterar(@PathVariable Integer id,
                                      @RequestBody PessoaTO to) {
-        return new ResponseEntity<>(service.editar(id, to), HttpStatus.OK);
+        Pessoa pessoa = service.editar(id, to);
+        if(validar(pessoa)) {
+            return new ResponseEntity<>(pessoa, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @DeleteMapping(path = "/pessoa/{id}")
     @ResponseBody
     public ResponseEntity<?> deletar(@PathVariable Integer id) {
-        return new ResponseEntity<>(service.excluir(id), HttpStatus.OK);
+        Pessoa pessoa = service.excluir(id);
+        if(validar(pessoa)) {
+            return new ResponseEntity<>(pessoa, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
-
+    private boolean validar(Object object) {
+        if (object != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 }
