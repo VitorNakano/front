@@ -20,9 +20,9 @@ public class PessoaServiceImp implements PessoaService {
 
     /**
      * Method to lists all Objects of Pessoa.
-     * Author: Vitor Nakano
-     * Version: 1.0
-     * Date: 01/17/2020
+     * @Author: Vitor Nakano
+     * @Version: 1.0
+     * @Date: 01/17/2020
      *
      * @return All Objects of Pessoa in Database.
      */
@@ -33,9 +33,9 @@ public class PessoaServiceImp implements PessoaService {
 
     /**
      * Method to find an Object of Pessoa by Name.
-     * Author: Vitor Nakano
-     * Version: 1.0
-     * Date: 01/17/2020
+     * @Author: Vitor Nakano
+     * @Version: 1.0
+     * @Date: 01/17/2020
      *
      * @param nome Pamater to search an Object of Pessoa in Database.
      * @return An Object of Pessoa.
@@ -48,18 +48,18 @@ public class PessoaServiceImp implements PessoaService {
                 validarParametros(pessoa);
                 return pessoa;
             } else {
-                return null;
+                throw new NullPointerException("Pessoa não encontrada.");
             }
         } else {
-            throw new NullPointerException("Nome não encontrado");
+            throw new NullPointerException("Nome não encontrado.");
         }
     }
 
     /**
      * Method to find an Object of Pessoa by ID.
-     * Author: Vitor Nakano
-     * Version: 1.0
-     * Date: 01/17/2020
+     * @Author: Vitor Nakano
+     * @Version: 1.0
+     * @Date: 01/17/2020
      *
      * @param idPessoa Parameter to search an Object of Pessoa in Database.
      * @return An Object of Pessoa.
@@ -71,7 +71,7 @@ public class PessoaServiceImp implements PessoaService {
             if (pessoa != null) {
                 return pessoa;
             } else {
-                return null;
+                throw new NullPointerException("Pessoa não encontrada.");
             }
         } else {
             throw new NullPointerException("O campo ID deve ser preenchido.");
@@ -81,29 +81,33 @@ public class PessoaServiceImp implements PessoaService {
 
     /**
      * Method to create a new Object of People and insert the Object into the Database.
-     * Author: Vitor Nakano
-     * Version: 1.0
-     * Date: 01/17/2020
+     * @Author: Vitor Nakano
+     * @Version: 1.0
+     * @Date: 01/17/2020
      *
      * @param to Instance of PessoaTO
      * @return An Object of Pessoa
      */
     @Override
     public Pessoa novo(PessoaTO to) {
-        if (validarParametros(to.getNome()) && validarParametros(to.getSobrenome())) {
-            Pessoa pessoa = new Pessoa(to.getNome(), to.getSobrenome());
-            pessoaDao.save(pessoa);
-            return pessoa;
+        if (to != null) {
+            if (validarParametros(to.getNome()) && validarParametros(to.getSobrenome())) {
+                Pessoa pessoa = new Pessoa(to.getNome(), to.getSobrenome());
+                pessoaDao.save(pessoa);
+                return pessoa;
+            } else {
+                throw new NullPointerException("Os campos Nomes e Sobrenome devem ser preenchidos.");
+            }
         } else {
-            return null;
+            throw new NullPointerException("Pessoa não encontrada.");
         }
     }
 
     /**
      * Method to make a change in an Object Pessoa by your ID.
-     * Author: Vitor Nakano
-     * Version: 1.0
-     * Date: 01/17/2020
+     * @Author: Vitor Nakano
+     * @Version: 1.0
+     * @Date: 01/17/2020
      *
      * @param idPessoa Identifier consulted on Database.
      * @param to       Instance of PessoaTO.
@@ -126,7 +130,7 @@ public class PessoaServiceImp implements PessoaService {
                 }
                 pessoaDao.save(pessoa);
             } else {
-                return null;
+                throw new NullPointerException("Pessoa não encontrada.");
             }
             return pessoa;
         } else {
@@ -136,9 +140,9 @@ public class PessoaServiceImp implements PessoaService {
 
     /**
      * Method to delete an Object of Pessoa by your ID from the Database.
-     * Author: Vitor Nakano
-     * Version: 1.0
-     * Date: 01/17/2020
+     * @Author: Vitor Nakano
+     * @Version: 1.0
+     * @Date: 01/17/2020
      *
      * @param idPessoa Identifier consulted on Database.
      * @return An Object of Pessoa.
@@ -150,7 +154,7 @@ public class PessoaServiceImp implements PessoaService {
             if (pessoa != null) {
                 pessoaDao.delete(pessoa);
             } else {
-                return null;
+                throw new NullPointerException("Pessoa não encontrada.");
             }
             return pessoa;
         } else {
@@ -159,10 +163,14 @@ public class PessoaServiceImp implements PessoaService {
     }
 
     /**
-     * Method to validate the received parameters
-     * @param param A generic parameter
-     * @param <T>   I don't know what is this parameter
-     * @return A boolean
+     * Method to validate the received parameters.
+     * @Author: Vitor Nakano
+     * @Version: 1.0
+     * @Date: 01/20/2020
+     *
+     * @param param A generic parameter.
+     * @param <T>   I don't know what is this parameter.
+     * @return A boolean.
      */
     private <T> boolean validarParametros(T param) {
         if (param != null) {
