@@ -173,19 +173,14 @@ public class PessoaServiceImp implements PessoaService {
      * @return A boolean.
      */
     private <T> boolean validarParametros(T param) {
-        if (param != null) {
-            if (param.getClass() == String.class) {
-                if (!((String) param).isEmpty()) {
-                    return true;
-                } else {
-                    return false;
-                }
-            } else if (param.getClass() == Integer.class) {
-                return true;
-            }
-            return true;
-        } else {
-            return false;
+        if(param instanceof String) {
+            return ((String) param).length() > 0;
         }
+        if(param instanceof Integer) {
+            return ((Integer) param) > 0;
+        }
+        
+
+        return false;
     }
 }

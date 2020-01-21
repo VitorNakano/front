@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:adm="http://github.com/adminfaces"
+                template="/WEB-INF/templates/template.xhtml">
+
+    <ui:define name="head">
+        <title>Listar Pessoas</title>
+    </ui:define>
+
+    <ui:define name="logo-lg">
+        Pessoa
+    </ui:define>
+
+    <ui:define name="logo-mini">
+        Pessoa
+    </ui:define>
+
+    <ui:define name="menu">
+        <ul class="sidebar-menu" data-widget="tree">
+            <li>
+                <p:link outcome="/index.xhtml" onclick="clearBreadCrumbs()">
+                    <i class="fa fa-home"></i>
+                    <span>Inicio</span>
+                </p:link>
+            </li>
+            <li class="header">
+                Menu
+            </li>
+            <li>
+                <p:link outcome="/adicionar-pessoa.xhtml">
+                    <i class="fa fa-user"></i>
+                    <span>Encontar Pessoa</span>
+                </p:link>
+            </li>
+            <li>
+                <p:link outcome="/adicionar-pessoa.xhtml">
+                    <i class="fa fa-user-plus"></i>
+                    <span>Cadastrar Pessoa</span>
+                </p:link>
+            </li>
+            <li>
+                <p:link outcome="/excluir-pessoa.xhtml">
+                    <i class="fa fa-user-times"></i>
+                    <span>Excluir Pessoa</span>
+                </p:link>
+            </li>
+            <li>
+                <p:link outcome="/listar-pessoas.xhtml">
+                    <i class="fa fa-users"></i>
+                    <span>Listar Pessoas</span>
+                </p:link>
+            </li>
+            <li>
+                <p:link outcome="/editar-pessoa.xhtml">
+                    <i class="fa fa-edit"></i>
+                    <span>Editar Pessoas</span>
+                </p:link>
+            </li>
+        </ul>
+    </ui:define>
+
+    <ui:define name="top-menu">
+        <ui:include src="/includes/top-bar.xhtml"/>
+    </ui:define>
+
+    <ui:define name="title">
+        <h2><b>Listar Pessoas</b></h2>
+    </ui:define>
+
+    <ui:define name="description">
+        Lista todas as pessoas existentes no Banco de Dados
+    </ui:define>
+
+    <ui:define name="body">
+
+        <h:form>
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <div id="main-buttons" class="hidden-sm hidden-xs">
+                        <p:commandButton actionListener="#{pessoaFrm.buscarPessoas()}"  icon="fa fa-plus"
+                                         value="Cadastrar" styleClass="btn-primary margin"/>
+                        <p:spacer width="5"/>
+                    </div>
+                    <div>
+                        <p:panelGrid columns="4" layout="tabular" contentStyleClass="p-align-baseline ui-fluid" style="margin: 10px">
+                            <p:outputLabel for="nome" value="Nome" />
+                            <p:inputText id="nome" />
+
+                            <p:outputLabel for="sobrenome" value="Sobrenome" />
+                            <p:inputText id="sobrenome" />
+                        </p:panelGrid>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>
