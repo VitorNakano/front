@@ -20,7 +20,7 @@
     <ui:define name="menu">
         <ul class="sidebar-menu" data-widget="tree">
             <li>
-                <p:link outcome="/index.xhtml" onclick="clearBreadCrumbs()">
+                <p:link outcome="/index.xhtml">
                     <i class="fa fa-home"></i>
                     <span>Inicio</span>
                 </p:link>
@@ -66,11 +66,11 @@
     </ui:define>
 
     <ui:define name="title">
-        <h2><b>Listar Pessoas</b></h2>
+        <h2><b>Cadastrar Pessoas</b></h2>
     </ui:define>
 
     <ui:define name="description">
-        Lista todas as pessoas existentes no Banco de Dados
+        Cadastra uma nova pessoa no banco
     </ui:define>
 
     <ui:define name="body">
@@ -79,18 +79,23 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <div id="main-buttons" class="hidden-sm hidden-xs">
-                        <p:commandButton actionListener="#{pessoaFrm.buscarPessoas()}"  icon="fa fa-plus"
+                        <p:commandButton actionListener="#{pessoaFrm.cadastrarPessoa()}" icon="fa fa-plus"
                                          value="Cadastrar" styleClass="btn-primary margin"/>
                         <p:spacer width="5"/>
                     </div>
                     <div>
-                        <p:panelGrid columns="4" layout="tabular" contentStyleClass="p-align-baseline ui-fluid" style="margin: 10px">
-                            <p:outputLabel for="nome" value="Nome" />
-                            <p:inputText id="nome" />
+                        <p:panel id="panel" header="Form" style="margin-bottom:10px;">
+                            <p:messages id="messages"/>
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <h:outputLabel for="nome" value="Nome: "/>
+                                <p:inputText id="nome" value="#{pessoaFrm.nome}" type="text"
+                                             required="true" requiredMessage="Este campo deve ser preenchido."/>
 
-                            <p:outputLabel for="sobrenome" value="Sobrenome" />
-                            <p:inputText id="sobrenome" />
-                        </p:panelGrid>
+                                <p:outputLabel for="sobrenome" value="Sobrenome: "/>
+                                <p:inputText id="sobrenome" value="#{pessoaFrm.sobrenome}" type="text"
+                                             required="true" requiredMessage="Este campo deve ser preenchido."/>
+                            </h:panelGrid>
+                        </p:panel>
                     </div>
                 </div>
             </div>
