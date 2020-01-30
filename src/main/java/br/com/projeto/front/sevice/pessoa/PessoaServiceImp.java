@@ -3,6 +3,7 @@ package br.com.projeto.front.sevice;
 import br.com.projeto.front.models.Pessoa;
 import br.com.projeto.front.models.to.PessoaTO;
 import br.com.projeto.front.repository.PessoaRepository;
+import br.com.projeto.front.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -32,6 +33,30 @@ public class PessoaServiceImp implements PessoaService {
     }
 
     /**
+     * Method to list all Objects of Pessoa with a value of the parameter.
+     * @Author: Vitor Nakano
+     * @Version: 1.0
+     * @Date: 01/23/2020
+     *
+     * @param nome Parameter to search in the Database.
+     * @return     A list with Objects of Pessoa who have the parameter nome.
+     */
+    @Override
+    public List<Pessoa> pessoasFiltro(String nome) {
+        if (Utils.validarParametros(nome)) {
+            List<Pessoa> pessoas = pessoaDao.findByFirstNameContains(nome);
+            if (pessoas != null) {
+                Utils.validarParametros(pessoas);
+                return pessoas;
+            } else {
+                throw new NullPointerException("Nenhum nome encontrado");
+            }
+        } else {
+            throw new NullPointerException("Nenhum nome encontrado");
+        }
+    }
+
+    /**
      * Method to find an Object of Pessoa by Name.
      * @Author: Vitor Nakano
      * @Version: 1.0
@@ -42,10 +67,10 @@ public class PessoaServiceImp implements PessoaService {
      */
     @Override
     public Pessoa findByNome(String nome) {
-        if (validarParametros(nome)) {
+        if (Utils.validarParametros(nome)) {
             Pessoa pessoa = pessoaDao.findByName(nome);
             if (pessoa != null) {
-                validarParametros(pessoa);
+                Utils.validarParametros(pessoa);
                 return pessoa;
             } else {
                 throw new NullPointerException("Pessoa não encontrada.");
@@ -91,7 +116,7 @@ public class PessoaServiceImp implements PessoaService {
     @Override
     public Pessoa novo(PessoaTO to) {
         if (to != null) {
-            if (validarParametros(to.getNome()) && validarParametros(to.getSobrenome())) {
+            if (Utils.validarParametros(to.getNome()) && Utils.validarParametros(to.getSobrenome())) {
                 Pessoa pessoa = new Pessoa(to.getNome(), to.getSobrenome());
                 pessoaDao.save(pessoa);
                 return pessoa;
@@ -110,21 +135,21 @@ public class PessoaServiceImp implements PessoaService {
      * @Date: 01/17/2020
      *
      * @param idPessoa Identifier consulted on Database.
-     * @param to       Instance of PessoaTO.
+     * @param p        Instance of Pessoa.
      * @return An Object of Pessoa.
      */
     @Override
-    public Pessoa editar(Integer idPessoa, PessoaTO to) {
+    public Pessoa editar(Integer idPessoa, Pessoa p) {
         if (idPessoa != null) {
             Pessoa pessoa = pessoaDao.findById(idPessoa).orElse(null);
             if (pessoa != null) {
-                if (validarParametros(to.getNome())) {
-                    pessoa.setFirst_name(to.getNome());
+                if (Utils.validarParametros(p.getFirstName())) {
+                    pessoa.setFirstName(p.getFirstName());
                 } else {
                     throw new NullPointerException("O campo Nome deve ser preenchido");
                 }
-                if (validarParametros(to.getSobrenome())) {
-                    pessoa.setLast_name(to.getSobrenome());
+                if (Utils.validarParametros(p.getFirstName())) {
+                    pessoa.setLastName(p.getLastName());
                 } else {
                     throw new NullPointerException("O campo Sobrenome deve ser preenchido");
                 }
@@ -160,27 +185,5 @@ public class PessoaServiceImp implements PessoaService {
         } else {
             throw new NullPointerException("O campo ID deve ser preenchido.");
         }
-    }
-
-    /**
-     * Method to validate the received parameters.
-     * @Author: Vitor Nakano
-     * @Version: 1.0
-     * @Date: 01/20/2020
-     *
-     * @param param A generic parameter.
-     * @param <T>   I don't know what is this parameter.
-     * @return A boolean.
-     */
-    private <T> boolean validarParametros(T param) {
-        if(param instanceof String) {
-            return ((String) param).length() > 0;
-        }
-        if(param instanceof Integer) {
-            return ((Integer) param) > 0;
-        }
-        
-
-        return false;
     }
 }

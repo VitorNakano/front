@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:adm="http://github.com/adminfaces"
+                template="/WEB-INF/templates/template.xhtml">
+
+    <ui:define name="head">
+        <title>Teste</title>
+        <h:outputStylesheet library="css" name="starter.css"/>
+        <h:outputScript library="js" name="script.js"/>
+    </ui:define>
+
+    <ui:define name="logo-lg">
+        Pessoa
+    </ui:define>
+
+    <ui:define name="logo-mini">
+        Pessoa
+    </ui:define>
+
+    <ui:define name="menu">
+        <ul class="sidebar-menu" data-widget="tree">
+            <li>
+                <p:link outcome="/index.xhtml">
+                    <i class="fa fa-home"></i>
+                    <span>Inicio</span>
+                </p:link>
+            </li>
+            <li class="header">
+                Menu
+            </li>
+            <li>
+                <p:link outcome="/cadastrar-pessoa.xhtml">
+                    <i class="fa fa-user-plus"></i>
+                    <span>Cadastrar Pessoa</span>
+                </p:link>
+            </li>
+            <li>
+                <p:link outcome="/listar-pessoas.xhtml">
+                    <i class="fa fa-users"></i>
+                    <span>Listar Pessoas</span>
+                </p:link>
+            </li>
+            <li>
+                <p:link outcome="/teste.xhtml">
+                    <i class="fa fa-fw fa-envelope"></i>
+                    <span>PUSH/SMS</span>
+                </p:link>
+            </li>
+        </ul>
+    </ui:define>
+
+    <ui:define name="top-menu">
+        <ui:include src="/includes/top-bar.xhtml"/>
+    </ui:define>
+
+    <ui:define name="body">
+
+        <h:form>
+            <p:panel header="PUSH/SMS">
+                <div class="ui-fluid">
+                    <p:panelGrid columns="1" columnClasses="ui-grid-col-12"
+                                 layout="grid" styleClass="ui-fluid card margin">
+
+                        <h:panelGroup styleClass="ui-fluid" layout="grid">
+                            <div class="ui-g-12 ui-sm-12">
+                                <div class="ui-material">
+                                    <p:selectOneRadio unselectable="true" value="#{pushSmsFrm.tipo}">
+                                        <f:selectItem itemLabel="SMS" itemValue="1"/>
+                                        <f:selectItem itemLabel="PUSH" itemValue="2"/>
+                                        <f:ajax event="valueChange" update="@form" render="titulo" />
+                                    </p:selectOneRadio>
+                                </div>
+                            </div>
+
+                        </h:panelGroup>
+
+                        <p:panel id="toggleable" header="Agendar"
+                                 toggleable="true" toggleSpeed="500"
+                                 closeSpeed="500" widgetVar="panel">
+                            <f:facet name="actions">
+                                <p:toggleSwitch value="#{pushSmsFrm.agendador}">
+                                    <f:ajax update="@form" render="agendador"/>
+                                </p:toggleSwitch>
+                            </f:facet>
+                            <div class="ui-fluid">
+                                <h:panelGrid columns="1" columnClasses="ui-grid-col-12">
+                                    <h:panelGroup id="agendador">
+                                        <div class="ui-g-12 ui-sm-12">
+                                            <div class="ui-material">
+                                                <p:datePicker id="range" selectionMode="multiple"
+                                                              value="#{pushSmsFrm.range}"
+                                                              readonlyInput="true"
+                                                              style="margin-left: 5px"
+                                                              locale="pt"
+                                                              disabled="#{pushSmsFrm.agendador eq 'false'}">
+                                                    <i id="faData" class="fa fa-2x fa-calendar"/>
+                                                </p:datePicker>
+                                                <p:outputLabel value="Datas"/>
+                                                <p:message for="range"/>
+                                            </div>
+                                        </div>
+                                        <div class="ui-g-12 ui-sm-12">
+                                            <div class="ui-material">
+                                                <p:datePicker id="timer"
+                                                              value="#{pushSmsFrm.timeOnly}"
+                                                              timeOnly="true"
+                                                              pattern="HH:mm"
+                                                              style="margin-left: 5px"
+                                                              disabled="#{pushSmsFrm.agendador eq 'false'}">
+                                                    <i id="faClock" class="fa fa-2x fa-clock-o"/>
+                                                </p:datePicker>
+                                                <p:outputLabel for="timer" value="Horário"/>
+                                                <p:message for="timer"/>
+                                            </div>
+                                        </div>
+                                        <h:commandButton value="Confirmar"
+                                                         class="btn btn-primary margin"
+                                                         disabled="#{pushSmsFrm.agendador eq 'false'}"/>
+                                    </h:panelGroup>
+                                </h:panelGrid>
+                            </div>
+                        </p:panel>
+
+                        <h:panelGroup id="conteudo">
+                            <div class="ui-g-12 ui-sm-12" style="margin-top: 16px">
+                                <div class="ui-material">
+                                    <p:selectOneMenu id="alvo" value="#{pushSmsFrm.alvos}"
+                                                     style="width: auto" required="true">
+                                        <f:selectItem itemLabel="Selecionar Alvo" itemValue=""
+                                                      noSelectionOption="true"/>
+                                        <f:selectItems value="#{pushSmsFrm.alvos}"/>
+                                    </p:selectOneMenu>
+                                    <p:outputLabel for="alvo" value="Alvo"/>
+                                    <p:message for="alvo"/>
+                                </div>
+                            </div>
+
+                            <div class="ui-g-12 ui-sm-12">
+                                <div class="ui-material">
+                                    <p:inputText id="titulo" required="true" placeholder=""
+                                                 disabled="#{pushSmsFrm.tipo eq '1'}"/>
+                                    <p:outputLabel for="titulo" value="Título"/>
+                                    <p:message for="titulo"/>
+                                </div>
+                            </div>
+
+                            <div class="ui-g-12 ui-sm-12">
+                                <div class="ui-material">
+                                    <p:inputTextarea id="mensagem" placeholder="" required="true"/>
+                                    <p:outputLabel for="mensagem" value="Mensagem"/>
+                                    <p:message for="mensagem"/>
+                                </div>
+                            </div>
+                        </h:panelGroup>
+
+                        <h:panelGroup>
+                            <div class="ui-g-12 ui-sm-12">
+                                <div class="ui-material">
+                                    <h:commandButton class="btn btn-primary"
+                                                     value="Enviar"/>
+                                </div>
+                            </div>
+                        </h:panelGroup>
+                    </p:panelGrid>
+                </div>
+            </p:panel>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>
