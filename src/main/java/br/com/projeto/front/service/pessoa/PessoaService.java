@@ -1,4 +1,4 @@
-package br.com.projeto.front.sevice;
+package br.com.projeto.front.sevice.pessoa;
 
 import br.com.projeto.front.models.Pessoa;
 import br.com.projeto.front.models.to.PessoaTO;
